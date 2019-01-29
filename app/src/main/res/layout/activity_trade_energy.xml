@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".tradeEnergy">
+
+    <TextView
+        android:id="@+id/MyBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="456dp"
+        android:text="My Balance"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <TextView
+        android:id="@+id/PriceUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="37dp"
+        android:text=" Price (UGX/kWh)"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household1Price"
+        app:layout_constraintEnd_toStartOf="@+id/kWhUnit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/kWhUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="392dp"
+        android:text="kWh Available"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/Household1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="244dp"
+        android:text="Household 1"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Household2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="244dp"
+        android:text="Household 2"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Household1" />
+
+    <Button
+        android:id="@+id/Household3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="244dp"
+        android:text="Household 3"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Household2" />
+
+    <Button
+        android:id="@+id/Household4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="244dp"
+        android:text="Household 4"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Household3" />
+
+    <TextView
+        android:id="@+id/Household1Price"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="18dp"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household2Price"
+        app:layout_constraintStart_toEndOf="@+id/Household1" />
+
+    <TextView
+        android:id="@+id/Household1kWh"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="18dp"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household2kWh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Household1Price" />
+
+    <TextView
+        android:id="@+id/Household2Price"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="18dp"
+        android:text="Price"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household3Price"
+        app:layout_constraintStart_toEndOf="@+id/Household2" />
+
+    <TextView
+        android:id="@+id/Household2kWh"
+        android:layout_width="75dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="18dp"
+        android:text="kWh"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household3kWh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Household2Price" />
+
+    <TextView
+        android:id="@+id/Household3Price"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="213dp"
+        android:text="Price"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Household3" />
+
+    <TextView
+        android:id="@+id/Household3kWh"
+        android:layout_width="75dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="46dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="213dp"
+        android:text="kWh"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Household3Price" />
+
+    <EditText
+        android:id="@+id/kWh"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="3dp"
+        android:ems="10"
+        android:hint="Enter kWh Needed"
+        android:inputType="number|numberDecimal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Price"
+        app:layout_constraintEnd_toStartOf="@+id/Confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Household4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/Household4Price"
+        android:layout_width="76dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="152dp"
+        android:ems="10"
+        android:hint="Enter Price"
+        android:inputType="number|numberDecimal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/Household4kWh"
+        app:layout_constraintStart_toEndOf="@+id/Household4" />
+
+    <EditText
+        android:id="@+id/Household4kWh"
+        android:layout_width="76dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="152dp"
+        android:ems="10"
+        android:hint="Enter kWh"
+        android:inputType="number|numberDecimal"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Household3kWh"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/Confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="104dp"
+        android:text="Confirm"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/BuyButton"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="29dp"
+        android:text="Buy"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kWh" />
+
+    <Button
+        android:id="@+id/OfferButton"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="28dp"
+        android:text="Offer"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Confirm" />
+
+    <TextView
+        android:id="@+id/Price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="8dp"
+        android:text="Total:"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/BuyButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Storage"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="64dp"
+        android:text="% Charge"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household1"
+        app:layout_constraintEnd_toStartOf="@+id/Wallet"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="13dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="93dp"
+        android:layout_marginBottom="16dp"
+        android:text="Balance"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/kWhUnit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/MyBalance"
+        app:layout_constraintVertical_bias="0.571" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="100dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:shadowColor="@android:color/holo_orange_light"
+        android:text="Update"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Household1"
+        app:layout_constraintEnd_toStartOf="@+id/PriceUnit"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Storage"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/BatteryLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:text="Battery Level"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/Storage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ListView
+        android:id="@+id/offerList"
+        android:layout_width="257dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.252"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.319" />
+
+</android.support.constraint.ConstraintLayout>
