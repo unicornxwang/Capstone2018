@@ -170,7 +170,7 @@ public class tradeEnergy extends AppCompatActivity {
     }
 
 
-    //Multiple offer
+    //Multiple offer//
     private void receiveUpdates()
     {
         if (btSocket != null) {
@@ -259,7 +259,7 @@ public class tradeEnergy extends AppCompatActivity {
         }
     }
 
-    //Single offer
+    //Single offer//
     /*private void receiveUpdates() {
         if (btSocket != null) {
             try {
