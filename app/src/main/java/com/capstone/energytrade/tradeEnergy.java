@@ -11,16 +11,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -29,10 +34,6 @@ public class tradeEnergy extends AppCompatActivity {
     private ProgressDialog progress;
 
     private Button BatteryLevel;
-    private Button Household1;
-    private Button Household2;
-    private Button Household3;
-    private Button Household4;
     private Button BuyButton;
     private Button Update;
     private Button OfferButton;
@@ -40,20 +41,9 @@ public class tradeEnergy extends AppCompatActivity {
 
 
     private TextView MyBalance;
-    private TextView Household1Price;
-    private TextView Household1kWh;
-    private TextView Household2Price;
-    private TextView Household2kWh;
-    private TextView Household3Price;
-    private TextView Household3kWh;
-
-    private EditText Household4Price;
-    private EditText Household4kWh;
 
     private TextView Storage;
     private TextView Wallet;
-    private TextView PriceUnit;
-    private TextView kWhUnit;
     private EditText kWh;
     private TextView Price;
 
@@ -69,6 +59,9 @@ public class tradeEnergy extends AppCompatActivity {
     private InputStream inStream = null;
     int readBufferPosition = 0;
     byte[] readBuffer = new byte[1024];
+    //private AdapterView.OnItemClickListener myOfferListClickListener;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,25 +75,7 @@ public class tradeEnergy extends AppCompatActivity {
         offerList = (ListView) findViewById(R.id.offerList);
         MyBalance = (TextView) findViewById(R.id.MyBalance);
 
-        Household1 = (Button) findViewById(R.id.Household1);
-        Household1.setText(R.string.Household1);
-        Household1Price = (TextView) findViewById(R.id.Household1Price);
-        Household1kWh = (TextView) findViewById(R.id.Household1kWh);
 
-        Household2 = (Button) findViewById(R.id.Household2);
-        Household2.setText(R.string.Household2);
-        Household2Price = (TextView) findViewById(R.id.Household2Price);
-        Household2kWh = (TextView) findViewById(R.id.Household2kWh);
-
-        Household3 = (Button) findViewById(R.id.Household3);
-        Household3.setText(R.string.Household3);
-        Household3Price = (TextView) findViewById(R.id.Household3Price);
-        Household3kWh = (TextView) findViewById(R.id.Household3kWh);
-
-        Household4 = (Button) findViewById((R.id.Household4));
-        Household4.setText(R.string.Household4);
-        Household4Price = (EditText) findViewById(R.id.Household4Price);
-        Household4kWh = (EditText) findViewById(R.id.Household4kWh);
 
         BatteryLevel = (Button) findViewById(R.id.BatteryLevel);
         Update = (Button) findViewById(R.id.update);
@@ -111,8 +86,7 @@ public class tradeEnergy extends AppCompatActivity {
 
         Storage = (TextView) findViewById(R.id.Storage);
         Wallet = (TextView) findViewById(R.id.Wallet);
-        PriceUnit = (TextView) findViewById(R.id.PriceUnit);
-        kWhUnit = (TextView) findViewById(R.id.kWhUnit);
+
         kWh = (EditText) findViewById(R.id.kWh);
         Price = (TextView) findViewById(R.id.Price);
 
@@ -152,8 +126,8 @@ public class tradeEnergy extends AppCompatActivity {
         BuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                confirmTransaction();
 
-                //loseBalance();
 
             }
         });
@@ -196,6 +170,7 @@ public class tradeEnergy extends AppCompatActivity {
     }
 
 
+    //Multiple offer
     private void receiveUpdates()
     {
         if (btSocket != null) {
@@ -207,12 +182,14 @@ public class tradeEnergy extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            try {
+            try
+            {
                 int bytesAvailable = inStream.available();
                 if (bytesAvailable > 0) {
                     byte[] packetBytes = new byte[bytesAvailable];
                     System.out.println(bytesAvailable);
                     inStream.read(packetBytes);
+
                     for (int i = 0; i < bytesAvailable; i++) {
                         byte b = packetBytes[i];
                         readBuffer[readBufferPosition++] = b;
@@ -221,30 +198,59 @@ public class tradeEnergy extends AppCompatActivity {
                     byte[] encodedBytes = new byte[readBufferPosition];
                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
 
+                    String[] offerOption = encodedBytes.toString().split("\n");
+                    int offerOptionindex = 1;
+                    for (String offerDetails : offerOption)
+                    {
+                        Scanner s = new Scanner(new String(String.valueOf(offerOption[offerOptionindex]))).useDelimiter("/");
 
-                    Scanner s = new Scanner(new String (encodedBytes)).useDelimiter("/");
+                        String signal = s.next();
+                        System.out.println(signal);
+                        String nodeID = s.next();
+                        System.out.println(nodeID);
+                        String price = s.next();
+                        System.out.println(price);
+                        //Household1Price.setText(price);
+                        String quantity = s.next();
+                        System.out.println(quantity);
+                        //Household1kWh.setText(quantity);
+                        String count = s.next();
+                        System.out.println(count);
+                        String path = s.next();
+                        System.out.println(path);
+                        s.close();
+                        ArrayList offer_list = new ArrayList();
+                        offer_list.add(nodeID + '\n' + "Price:" + price + "Quantity:" + quantity);
+                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
+                        offerList.setAdapter(arrayAdapter);
+                        offerList.setOnItemClickListener(myOfferListClickListener);
+                        offerOptionindex++;
+                    }
+                  /* for(int i=0, l=offerOption.length; i<l;i++) {
 
-                    String signal = s.next();
-                    System.out.println(signal);
-                    String nodeID = s.next();
-                    System.out.println(nodeID);
-                    String price = s.next();
-                    System.out.println(price);
-                    Household1Price.setText(price);
-                    String quantity = s.next();
-                    System.out.println(quantity);
-                    Household1kWh.setText(quantity);
-                    String count = s.next();
-                    System.out.println(count);
-                    String path = s.next();
-                    System.out.println(path);
-                    ArrayList listofOffers = new ArrayList();
+                        Scanner s = new Scanner(new String(offerOption[i])).useDelimiter("/");
 
-                    s.close();
-
-
-                    //System.out.println(encodedBytes[readBufferPosition - 5]);
-                    //Household1Price.setText(String.valueOf(encodedBytes[readBufferPosition-5]));
+                        String signal = s.next();
+                        System.out.println(signal);
+                        String nodeID = s.next();
+                        System.out.println(nodeID);
+                        String price = s.next();
+                        System.out.println(price);
+                        Household1Price.setText(price);
+                        String quantity = s.next();
+                        System.out.println(quantity);
+                        Household1kWh.setText(quantity);
+                        String count = s.next();
+                        System.out.println(count);
+                        String path = s.next();
+                        System.out.println(path);
+                        String[] offer = new String[]{nodeID,"Price:", price,"Quantity", quantity};
+                        final List<String> offer_list = new ArrayList<String>(Arrays.asList(offer));
+                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
+                        offerList.setAdapter(arrayAdapter);
+                        offerList.setOnItemClickListener(myOfferListClickListener);
+                        s.close();
+                    }*/
 
                 }
             } catch (IOException ex) {
@@ -252,6 +258,8 @@ public class tradeEnergy extends AppCompatActivity {
             }
         }
     }
+
+    //Single offer
     /*private void receiveUpdates() {
         if (btSocket != null) {
             try {
@@ -285,19 +293,19 @@ public class tradeEnergy extends AppCompatActivity {
                     System.out.println(nodeID);
                     String price = s.next();
                     System.out.println(price);
-                    Household1Price.setText(price);
                     String quantity = s.next();
                     System.out.println(quantity);
-                    Household1kWh.setText(quantity);
                     String count = s.next();
                     System.out.println(count);
                     String path = s.next();
                     System.out.println(path);
-                    ArrayList listofOffers = new ArrayList();
-
                     s.close();
 
-
+                    ArrayList offer_list = new ArrayList();
+                    offer_list.add("Node ID:" + nodeID + '\n' + "Price:" + price + ' ' + "Quantity:" + quantity);
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
+                    offerList.setAdapter(arrayAdapter);
+                    offerList.setOnItemClickListener(myOfferListClickListener);
                     //System.out.println(encodedBytes[readBufferPosition - 5]);
                     //Household1Price.setText(String.valueOf(encodedBytes[readBufferPosition-5]));
 
@@ -305,21 +313,39 @@ public class tradeEnergy extends AppCompatActivity {
             } catch (IOException ex) {
 
             }
+
         }
+
     }*/
+
+    private OnItemClickListener myOfferListClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String transactionInfo = ((TextView)view).getText().toString();
+            //String price = transactionInfo.indexOf(price)
+            //String price = transactionInfo.substring(19,22);
+            //String kWhAvailable = transactionInfo.substring(33,35);
+            
+
+
+        }
+    };
 
     private void updateOffers() {
         if (btSocket != null) {
             try {
-                //btSocket.getOutputStream().write(0);
-                Float getOfferPrice = Float.valueOf(Household4Price.getText().toString());
-                ByteBuffer a = ByteBuffer.allocate(4);
-                a.putFloat(getOfferPrice);
-                btSocket.getOutputStream().write(a.array());
-                Float getkWhAvailable = Float.valueOf(Household4kWh.getText().toString());
-                ByteBuffer b = ByteBuffer.allocate(4);
-                b.putFloat(getkWhAvailable);
-                btSocket.getOutputStream().write(b.array());
+                btSocket.getOutputStream().write(0);
+                btSocket.getOutputStream().write('/');
+                //Float getOfferPrice = Float.valueOf(Household4Price.getText().toString());
+                //ByteBuffer a = ByteBuffer.allocate(1);
+                //a.putFloat(getOfferPrice);
+                //btSocket.getOutputStream().write(a.array());
+                btSocket.getOutputStream().write('/');
+                //Float getkWhAvailable = Float.valueOf(Household4kWh.getText().toString());
+                //ByteBuffer b = ByteBuffer.allocate(1);
+                //b.putFloat(getkWhAvailable);
+                //btSocket.getOutputStream().write(b.array());
+                btSocket.getOutputStream().write('/');
 
             } catch (IOException e) {
                 msg("Error");
@@ -327,6 +353,32 @@ public class tradeEnergy extends AppCompatActivity {
         }
     }
 
+    private void confirmTransaction()
+    {
+        if (btSocket != null){
+            try{
+                btSocket.getOutputStream().write(2);
+                btSocket.getOutputStream().write('/');
+                //nodeID
+                btSocket.getOutputStream().write('/');
+                //price from selected offer
+                btSocket.getOutputStream().write('/');
+                Float getkWhNeeded = Float.valueOf(kWh.getText().toString());
+                ByteBuffer c = ByteBuffer.allocate(1);
+                c.putFloat(getkWhNeeded);
+                btSocket.getOutputStream().write(c.array());
+                btSocket.getOutputStream().write('/');
+                //pathcount
+                btSocket.getOutputStream().write('/');
+                //path
+                btSocket.getOutputStream().write('/');
+                btSocket.getOutputStream().write('\n');
+            }catch(IOException e) {
+                msg("Error");
+            }
+
+        }
+    }
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
