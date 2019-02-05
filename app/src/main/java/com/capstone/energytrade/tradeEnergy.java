@@ -28,8 +28,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
-
+import java.util.Map;
+import java.util.HashMap;
 public class tradeEnergy extends AppCompatActivity {
+
+    private Map<Integer, Map<String,String>> TRANSACTION_INFO;
+    private Integer nodeIDSelected;
 
     private ProgressDialog progress;
 
@@ -41,8 +45,8 @@ public class tradeEnergy extends AppCompatActivity {
 
 
     private TextView MyBalance;
-
     private TextView Storage;
+
     private TextView Wallet;
     private EditText kWh;
     private TextView Price;
@@ -146,7 +150,7 @@ public class tradeEnergy extends AppCompatActivity {
     private void requestStateofCharge() {
         if(btSocket!=null){
             try{
-                btSocket.getOutputStream().write(4);
+                btSocket.getOutputStream().write('4');
             }catch (IOException E){
                 msg("Error");
             }
@@ -192,15 +196,17 @@ public class tradeEnergy extends AppCompatActivity {
 
                     for (int i = 0; i < bytesAvailable; i++) {
                         byte b = packetBytes[i];
-                        readBuffer[readBufferPosition++] = b;
+                        if( b != 0) {
+                            readBuffer[readBufferPosition++] = b;
+                        }
                         //System.out.println(new String(readBuffer));
                     }
                     byte[] encodedBytes = new byte[readBufferPosition];
                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
 
-                    String[] offerOption = encodedBytes.toString().split("\n");
-                    int offerOptionindex = 1;
-                    for (String offerDetails : offerOption)
+                    String[] offerOption = new String(encodedBytes).split("\n");
+                    //int offerOptionindex = 1;
+                    /*for (String offerDetails : offerOption)
                     {
                         Scanner s = new Scanner(new String(String.valueOf(offerOption[offerOptionindex]))).useDelimiter("/");
 
@@ -225,32 +231,45 @@ public class tradeEnergy extends AppCompatActivity {
                         offerList.setAdapter(arrayAdapter);
                         offerList.setOnItemClickListener(myOfferListClickListener);
                         offerOptionindex++;
-                    }
-                  /* for(int i=0, l=offerOption.length; i<l;i++) {
-
-                        Scanner s = new Scanner(new String(offerOption[i])).useDelimiter("/");
-
-                        String signal = s.next();
-                        System.out.println(signal);
-                        String nodeID = s.next();
-                        System.out.println(nodeID);
-                        String price = s.next();
-                        System.out.println(price);
-                        Household1Price.setText(price);
-                        String quantity = s.next();
-                        System.out.println(quantity);
-                        Household1kWh.setText(quantity);
-                        String count = s.next();
-                        System.out.println(count);
-                        String path = s.next();
-                        System.out.println(path);
-                        String[] offer = new String[]{nodeID,"Price:", price,"Quantity", quantity};
-                        final List<String> offer_list = new ArrayList<String>(Arrays.asList(offer));
-                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
-                        offerList.setAdapter(arrayAdapter);
-                        offerList.setOnItemClickListener(myOfferListClickListener);
-                        s.close();
                     }*/
+                    ArrayList<String> offer_list = new ArrayList<String>();
+                    TRANSACTION_INFO = new HashMap<Integer, Map<String,String>>();
+                    for(int i=0; i < offerOption.length;i++) {
+                        String[] offerInformation = offerOption[i].split("/");
+
+//                        Scanner s = new Scanner(new String(offerOption[i])).useDelimiter("/");
+                       if (offerInformation.length >= 6) {
+                           String signal = offerInformation[0];
+                           System.out.println(signal);
+                           String nodeID = offerInformation[1];
+                           System.out.println(nodeID);
+                           String price = offerInformation[2];
+                           System.out.println(price);
+                           String quantity = offerInformation[3];
+                           System.out.println(quantity);
+                           String count = offerInformation[4];
+                           System.out.println(count);
+                           String path = offerInformation[5];
+                           System.out.println(path);
+//                       s.close();
+                           Map<String,String> offerDetails = new HashMap<String,String>();
+                           offerDetails.put("Price",price);
+                           offerDetails.put("Quantity", quantity);
+                           offerDetails.put("Count", count);
+                           offerDetails.put("Path", path);
+
+                           int householdID = Integer.parseInt(nodeID);
+                           TRANSACTION_INFO.put(householdID,offerDetails);
+                           offer_list.add(nodeID + '\n' + "Price:" + price + " Quantity:" + quantity);
+
+                           //offerOptionindex++;
+                       }
+
+
+                    }
+                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
+                    offerList.setAdapter(arrayAdapter);
+                    offerList.setOnItemClickListener(myOfferListClickListener);
 
                 }
             } catch (IOException ex) {
@@ -322,7 +341,12 @@ public class tradeEnergy extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             String transactionInfo = ((TextView)view).getText().toString();
-            //String price = transactionInfo.indexOf(price)
+            System.out.println(transactionInfo);
+            String[]extractNodeID = transactionInfo.split("\n");
+            int householdID = Integer.parseInt(extractNodeID[0]);
+            Map<String, String> offerDetails = TRANSACTION_INFO.get(householdID);
+            System.out.println(offerDetails.get("Price"));
+            nodeIDSelected = householdID;
             //String price = transactionInfo.substring(19,22);
             //String kWhAvailable = transactionInfo.substring(33,35);
             
@@ -334,17 +358,17 @@ public class tradeEnergy extends AppCompatActivity {
     private void updateOffers() {
         if (btSocket != null) {
             try {
-                btSocket.getOutputStream().write(0);
+                btSocket.getOutputStream().write('0');
                 btSocket.getOutputStream().write('/');
-                //Float getOfferPrice = Float.valueOf(Household4Price.getText().toString());
-                //ByteBuffer a = ByteBuffer.allocate(1);
-                //a.putFloat(getOfferPrice);
-                //btSocket.getOutputStream().write(a.array());
+//                Float getOfferPrice = Float.valueOf(Household4Price.getText().toString());
+//                ByteBuffer a = ByteBuffer.allocate(1);
+//                a.putFloat(getOfferPrice);
+//                btSocket.getOutputStream().write(a.array());
                 btSocket.getOutputStream().write('/');
-                //Float getkWhAvailable = Float.valueOf(Household4kWh.getText().toString());
-                //ByteBuffer b = ByteBuffer.allocate(1);
-                //b.putFloat(getkWhAvailable);
-                //btSocket.getOutputStream().write(b.array());
+//                Float getkWhAvailable = Float.valueOf(Household4kWh.getText().toString());
+//                ByteBuffer b = ByteBuffer.allocate(1);
+//                b.putFloat(getkWhAvailable);
+//                btSocket.getOutputStream().write(b.array());
                 btSocket.getOutputStream().write('/');
 
             } catch (IOException e) {
@@ -357,22 +381,35 @@ public class tradeEnergy extends AppCompatActivity {
     {
         if (btSocket != null){
             try{
-                btSocket.getOutputStream().write(2);
+                btSocket.getOutputStream().write('2');
                 btSocket.getOutputStream().write('/');
-                //nodeID
+
+
+                if(nodeIDSelected<10){
+                    btSocket.getOutputStream().write('0');
+                    btSocket.getOutputStream().write(nodeIDSelected.toString().getBytes());
+                }
+                else {
+                    btSocket.getOutputStream().write(nodeIDSelected.toString().getBytes());
+                }
+
+
                 btSocket.getOutputStream().write('/');
-                //price from selected offer
+
+                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Price").getBytes());
                 btSocket.getOutputStream().write('/');
-                Float getkWhNeeded = Float.valueOf(kWh.getText().toString());
-                ByteBuffer c = ByteBuffer.allocate(1);
-                c.putFloat(getkWhNeeded);
-                btSocket.getOutputStream().write(c.array());
+
+                btSocket.getOutputStream().write(kWh.getText().toString().getBytes());
                 btSocket.getOutputStream().write('/');
-                //pathcount
+
+                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Count").getBytes());
                 btSocket.getOutputStream().write('/');
-                //path
+
+                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Path").getBytes());
                 btSocket.getOutputStream().write('/');
+
                 btSocket.getOutputStream().write('\n');
+
             }catch(IOException e) {
                 msg("Error");
             }
