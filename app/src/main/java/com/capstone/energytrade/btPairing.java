@@ -86,7 +86,7 @@ public class btPairing extends AppCompatActivity {
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
             // Make an intent to start next activity.
-            Intent i = new Intent(btPairing.this, tradeEnergy.class);
+            Intent i = new Intent(btPairing.this, setup_interface.class);
             //Change the activity.
             i.putExtra(EXTRA_ADDRESS, address); //this will be received at ledControl (class) Activity
             startActivity(i);

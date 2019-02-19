@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +26,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 import java.util.Map;
 import java.util.HashMap;
@@ -37,19 +36,10 @@ public class tradeEnergy extends AppCompatActivity {
 
     private ProgressDialog progress;
 
-    private Button BatteryLevel;
-    private Button BuyButton;
+    private Button buytobattery;
     private Button Update;
-    private Button OfferButton;
-    private Button Confirm;
-
-
-    private TextView MyBalance;
-    private TextView Storage;
-
-    private TextView Wallet;
-    private EditText kWh;
-    private TextView Price;
+    private Button buytouse;
+    private ImageButton return_tradeEnergy;
 
     private ListView offerList;
     BluetoothAdapter myBluetooth = null;
@@ -65,6 +55,8 @@ public class tradeEnergy extends AppCompatActivity {
     byte[] readBuffer = new byte[1024];
     //private AdapterView.OnItemClickListener myOfferListClickListener;
 
+    public static final String btbOfferPrice = "btbOfferPrice";
+    public static final String btbOfferQuantity = "btbOfferQuantity";
 
 
     @Override
@@ -77,31 +69,34 @@ public class tradeEnergy extends AppCompatActivity {
 
 
         offerList = (ListView) findViewById(R.id.offerList);
-        MyBalance = (TextView) findViewById(R.id.MyBalance);
-
-
-
-        BatteryLevel = (Button) findViewById(R.id.BatteryLevel);
         Update = (Button) findViewById(R.id.update);
-        BuyButton = (Button) findViewById(R.id.BuyButton);
-        BuyButton.setText(R.string.BuyButton);
-        OfferButton = (Button) findViewById(R.id.OfferButton);
-        OfferButton.setText(R.string.OfferButton);
 
-        Storage = (TextView) findViewById(R.id.Storage);
-        Wallet = (TextView) findViewById(R.id.Wallet);
-
-        kWh = (EditText) findViewById(R.id.kWh);
-        Price = (TextView) findViewById(R.id.Price);
-
-        Confirm = (Button) findViewById(R.id.Confirm);
-
-        BatteryLevel.setOnClickListener(new View.OnClickListener() {
+        buytobattery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestStateofCharge();
+                Intent btbInterface = new Intent(tradeEnergy.this, buytobattery.class);
+                String price_buytobattery = TRANSACTION_INFO.get(nodeIDSelected).get("Price");
+                btbInterface.putExtra(btbOfferPrice, price_buytobattery);
+                String quantity_buytobattery = TRANSACTION_INFO.get(nodeIDSelected).get("Quantity");
+                btbInterface.putExtra(btbOfferQuantity, quantity_buytobattery);
+                startActivity(btbInterface);
             }
         });
+
+        buytouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent btuInterface = new Intent(tradeEnergy.this, buytouse.class);
+
+                startActivity(btuInterface);
+            }
+        });
+//        BatteryLevel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestStateofCharge();
+//            }
+//        });
 
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,69 +105,34 @@ public class tradeEnergy extends AppCompatActivity {
             }
         });
 
-        Confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                double Result = 0.0;
-                if (kWh.getText().toString().equals("")) {
-                    Price.setText(R.string.ErrorMessage);
-                } else {
-                    double Kilowatthour = Double.parseDouble(kWh.getText().toString());
-                    Result = Kilowatthour;
-                    Price.setText("Total: " + String.format("%.2f", Result) + "UGX");
-                }
+//        BuyButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                confirmTransaction();
+//            }
+//        });
 
 
-            }
-        });
-
-        BuyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmTransaction();
-
-
-            }
-        });
-
-
-        OfferButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateOffers();
-
-            }
-        });
+//        OfferButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                updateOffers();
+//
+//            }
+//        });
 
     }
 
-    private void requestStateofCharge() {
-        if(btSocket!=null){
-            try{
-                btSocket.getOutputStream().write('4');
-            }catch (IOException E){
-                msg("Error");
-            }
-        }
-    }
-
-    private void loseBalance() {
-        double FinalBalance = 0.0;
-        String NumberOnly = (Price.getText().toString()).replaceAll("[^0-9]", "");
-        double Transaction = Double.parseDouble(NumberOnly);
-        FinalBalance = -Transaction / 100;
-        Wallet.setText(String.format("%.2f", FinalBalance) + "UGX");
-    }
-
-    private void gainBalance() {
-        double FinalBalance = 0.0;
-        String NumberOnly = (Price.getText().toString()).replaceAll("[^0-9]", "");
-        double Transaction = Double.parseDouble(NumberOnly);
-        FinalBalance = Transaction / 100;
-        Wallet.setText(String.format("%.2f", FinalBalance) + "UGX");
-    }
-
+//    private void requestStateofCharge() {
+//        if(btSocket!=null){
+//            try{
+//                btSocket.getOutputStream().write('4');
+//            }catch (IOException E){
+//                msg("Error");
+//            }
+//        }
+//    }
 
     //Multiple offer//
     private void receiveUpdates()
@@ -198,6 +158,8 @@ public class tradeEnergy extends AppCompatActivity {
                         byte b = packetBytes[i];
                         if( b != 0) {
                             readBuffer[readBufferPosition++] = b;
+                            //char btoString = (char) b;
+                            System.out.println((char) b);
                         }
                         //System.out.println(new String(readBuffer));
                     }
@@ -205,39 +167,11 @@ public class tradeEnergy extends AppCompatActivity {
                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
 
                     String[] offerOption = new String(encodedBytes).split("\n");
-                    //int offerOptionindex = 1;
-                    /*for (String offerDetails : offerOption)
-                    {
-                        Scanner s = new Scanner(new String(String.valueOf(offerOption[offerOptionindex]))).useDelimiter("/");
-
-                        String signal = s.next();
-                        System.out.println(signal);
-                        String nodeID = s.next();
-                        System.out.println(nodeID);
-                        String price = s.next();
-                        System.out.println(price);
-                        //Household1Price.setText(price);
-                        String quantity = s.next();
-                        System.out.println(quantity);
-                        //Household1kWh.setText(quantity);
-                        String count = s.next();
-                        System.out.println(count);
-                        String path = s.next();
-                        System.out.println(path);
-                        s.close();
-                        ArrayList offer_list = new ArrayList();
-                        offer_list.add(nodeID + '\n' + "Price:" + price + "Quantity:" + quantity);
-                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
-                        offerList.setAdapter(arrayAdapter);
-                        offerList.setOnItemClickListener(myOfferListClickListener);
-                        offerOptionindex++;
-                    }*/
                     ArrayList<String> offer_list = new ArrayList<String>();
                     TRANSACTION_INFO = new HashMap<Integer, Map<String,String>>();
                     for(int i=0; i < offerOption.length;i++) {
                         String[] offerInformation = offerOption[i].split("/");
 
-//                        Scanner s = new Scanner(new String(offerOption[i])).useDelimiter("/");
                        if (offerInformation.length >= 6) {
                            String signal = offerInformation[0];
                            System.out.println(signal);
@@ -251,7 +185,7 @@ public class tradeEnergy extends AppCompatActivity {
                            System.out.println(count);
                            String path = offerInformation[5];
                            System.out.println(path);
-//                       s.close();
+
                            Map<String,String> offerDetails = new HashMap<String,String>();
                            offerDetails.put("Price",price);
                            offerDetails.put("Quantity", quantity);
@@ -262,7 +196,6 @@ public class tradeEnergy extends AppCompatActivity {
                            TRANSACTION_INFO.put(householdID,offerDetails);
                            offer_list.add(nodeID + '\n' + "Price:" + price + " Quantity:" + quantity);
 
-                           //offerOptionindex++;
                        }
 
 
@@ -278,64 +211,6 @@ public class tradeEnergy extends AppCompatActivity {
         }
     }
 
-    //Single offer//
-    /*private void receiveUpdates() {
-        if (btSocket != null) {
-            try {
-                btSocket.getOutputStream().write('1');
-                btSocket.getOutputStream().write('\n');
-                inStream = btSocket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                int bytesAvailable = inStream.available();
-                if (bytesAvailable > 0) {
-                    byte[] packetBytes = new byte[bytesAvailable];
-                    System.out.println(bytesAvailable);
-                    inStream.read(packetBytes);
-                    for (int i = 0; i < bytesAvailable; i++) {
-                        byte b = packetBytes[i];
-                        readBuffer[readBufferPosition++] = b;
-                        //System.out.println(new String(readBuffer));
-                    }
-                    byte[] encodedBytes = new byte[readBufferPosition];
-                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
-
-
-                    Scanner s = new Scanner(new String (encodedBytes)).useDelimiter("/");
-
-                    String signal = s.next();
-                    System.out.println(signal);
-                    String nodeID = s.next();
-                    System.out.println(nodeID);
-                    String price = s.next();
-                    System.out.println(price);
-                    String quantity = s.next();
-                    System.out.println(quantity);
-                    String count = s.next();
-                    System.out.println(count);
-                    String path = s.next();
-                    System.out.println(path);
-                    s.close();
-
-                    ArrayList offer_list = new ArrayList();
-                    offer_list.add("Node ID:" + nodeID + '\n' + "Price:" + price + ' ' + "Quantity:" + quantity);
-                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
-                    offerList.setAdapter(arrayAdapter);
-                    offerList.setOnItemClickListener(myOfferListClickListener);
-                    //System.out.println(encodedBytes[readBufferPosition - 5]);
-                    //Household1Price.setText(String.valueOf(encodedBytes[readBufferPosition-5]));
-
-                }
-            } catch (IOException ex) {
-
-            }
-
-        }
-
-    }*/
 
     private OnItemClickListener myOfferListClickListener = new OnItemClickListener() {
         @Override
@@ -347,35 +222,30 @@ public class tradeEnergy extends AppCompatActivity {
             Map<String, String> offerDetails = TRANSACTION_INFO.get(householdID);
             System.out.println(offerDetails.get("Price"));
             nodeIDSelected = householdID;
-            //String price = transactionInfo.substring(19,22);
-            //String kWhAvailable = transactionInfo.substring(33,35);
-            
-
-
         }
     };
 
-    private void updateOffers() {
-        if (btSocket != null) {
-            try {
-                btSocket.getOutputStream().write('0');
-                btSocket.getOutputStream().write('/');
+//    private void updateOffers() {
+//        if (btSocket != null) {
+//            try {
+//                btSocket.getOutputStream().write('0');
+//                btSocket.getOutputStream().write('/');
 //                Float getOfferPrice = Float.valueOf(Household4Price.getText().toString());
 //                ByteBuffer a = ByteBuffer.allocate(1);
 //                a.putFloat(getOfferPrice);
 //                btSocket.getOutputStream().write(a.array());
-                btSocket.getOutputStream().write('/');
+//                btSocket.getOutputStream().write('/');
 //                Float getkWhAvailable = Float.valueOf(Household4kWh.getText().toString());
 //                ByteBuffer b = ByteBuffer.allocate(1);
 //                b.putFloat(getkWhAvailable);
 //                btSocket.getOutputStream().write(b.array());
-                btSocket.getOutputStream().write('/');
-
-            } catch (IOException e) {
-                msg("Error");
-            }
-        }
-    }
+//                btSocket.getOutputStream().write('/');
+//
+//            } catch (IOException e) {
+//                msg("Error");
+//            }
+//        }
+//    }
 
     private void confirmTransaction()
     {
@@ -399,14 +269,15 @@ public class tradeEnergy extends AppCompatActivity {
                 btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Price").getBytes());
                 btSocket.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write(kWh.getText().toString().getBytes());
+//                btSocket.getOutputStream().write(kWh.getText().toString().getBytes());
+                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Quantity").getBytes());
                 btSocket.getOutputStream().write('/');
 
                 btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Count").getBytes());
                 btSocket.getOutputStream().write('/');
 
                 btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Path").getBytes());
-                btSocket.getOutputStream().write('/');
+//                btSocket.getOutputStream().write('/');
 
                 btSocket.getOutputStream().write('\n');
 

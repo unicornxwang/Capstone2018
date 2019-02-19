@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".tradeEnergy">
+    tools:context=".sell_interface">
 
     <ImageButton
-        android:id="@+id/return_tradeEnergy"
+        android:id="@+id/return2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="320dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -23,56 +22,55 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="?attr/actionModeCloseDrawable" />
 
-    <Button
-        android:id="@+id/buytobattery"
-        android:layout_width="90dp"
+    <EditText
+        android:id="@+id/priceforSell"
+        android:layout_width="134dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginBottom="29dp"
-        android:text="To Battery"
-        android:textSize="12sp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="133dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="Unit Price"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.049" />
 
-    <Button
-        android:id="@+id/buytouse"
-        android:layout_width="90dp"
+    <EditText
+        android:id="@+id/quantityforSell"
+        android:layout_width="134dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="28dp"
-        android:text="To Use"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/update"
-        android:layout_width="100dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:shadowColor="@android:color/holo_orange_light"
-        android:text="Update"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Quantity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.472" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Sell"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.879"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.017" />
-
-    <ListView
-        android:id="@+id/offerList"
-        android:layout_width="309dp"
-        android:layout_height="318dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="108dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintVertical_bias="0.682" />
 </android.support.constraint.ConstraintLayout>
