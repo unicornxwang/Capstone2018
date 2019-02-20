@@ -7,25 +7,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class buytouse_complete extends AppCompatActivity {
+public class sell_complete extends AppCompatActivity {
 
-    private TextView text1_btuc;
-    private Button cancel_btuc;
+    private TextView text1_sellcomplete;
+    private Button stop_sellcomplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buytouse_complete);
+        setContentView(R.layout.activity_sell_complete);
 
-        text1_btuc = (TextView) findViewById(R.id.text1_btuc);
-        cancel_btuc = (Button) findViewById(R.id.cancel_btuc);
+        text1_sellcomplete = (TextView) findViewById(R.id.text1_sellcomplete);
+        stop_sellcomplete = (Button) findViewById(R.id.stop_sellcomplete);
 
-        cancel_btuc.setOnClickListener(new View.OnClickListener() {
+        stop_sellcomplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
+
     }
 }

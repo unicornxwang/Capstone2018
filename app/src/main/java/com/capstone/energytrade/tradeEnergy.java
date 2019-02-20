@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,63 +35,67 @@ public class tradeEnergy extends AppCompatActivity {
     private Map<Integer, Map<String,String>> TRANSACTION_INFO;
     private Integer nodeIDSelected;
 
-    private ProgressDialog progress;
 
-    private Button buytobattery;
-    private Button Update;
-    private Button buytouse;
-    private ImageButton return_tradeEnergy;
 
-    private ListView offerList;
+
+    private ImageButton return_tradeenergy;
+    private Button update_tradeenergy;
+    private Button btb_tradeenergy;
+
+    private TextView text1_tradeenergy;
+    private TextView text2_tradeenergy;
+    private TextView text3_tradeenergy;
+
+    private EditText quantity_tradeenergy;
+    private EditText price_tradeenergy;
+
+    private ListView offerlist_tradeenergy;
+
+
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
 
-    String address = null;
+    String address_tradeenergy = null;
     private boolean isBtConnected = false;
     //SPP UUID. Look for it
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    private ProgressDialog progress;
     private InputStream inStream = null;
+
     int readBufferPosition = 0;
     byte[] readBuffer = new byte[1024];
-    //private AdapterView.OnItemClickListener myOfferListClickListener;
 
     public static final String btbOfferPrice = "btbOfferPrice";
     public static final String btbOfferQuantity = "btbOfferQuantity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade_energy);
         Intent newint = getIntent();
-        address = newint.getStringExtra(btPairing.EXTRA_ADDRESS);
+        address_tradeenergy = newint.getStringExtra(btPairing.EXTRA_ADDRESS);
         new ConnectBT().execute();
 
+        return_tradeenergy = (ImageButton) findViewById(R.id.return_tradeenergy);
+        btb_tradeenergy = (Button) findViewById(R.id.btb_tradeenergy);
+        update_tradeenergy = (Button) findViewById(R.id.update_tradeenergy);
 
-        offerList = (ListView) findViewById(R.id.offerList);
-        Update = (Button) findViewById(R.id.update);
+        quantity_tradeenergy = (EditText) findViewById(R.id.quantity_tradeenergy);
+        price_tradeenergy = (EditText) findViewById(R.id.price_tradeenergy);
 
-        buytobattery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent btbInterface = new Intent(tradeEnergy.this, buytobattery.class);
-                String price_buytobattery = TRANSACTION_INFO.get(nodeIDSelected).get("Price");
-                btbInterface.putExtra(btbOfferPrice, price_buytobattery);
-                String quantity_buytobattery = TRANSACTION_INFO.get(nodeIDSelected).get("Quantity");
-                btbInterface.putExtra(btbOfferQuantity, quantity_buytobattery);
-                startActivity(btbInterface);
-            }
-        });
+        offerlist_tradeenergy = (ListView) findViewById(R.id.offerlist_tradeenergy);
 
-        buytouse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent btuInterface = new Intent(tradeEnergy.this, buytouse.class);
 
-                startActivity(btuInterface);
-            }
-        });
+
+
+//        buytouse.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent btuInterface = new Intent(tradeEnergy.this, buytouse.class);
+//
+//                startActivity(btuInterface);
+//            }
+//        });
 //        BatteryLevel.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -98,7 +103,15 @@ public class tradeEnergy extends AppCompatActivity {
 //            }
 //        });
 
-        Update.setOnClickListener(new View.OnClickListener() {
+        return_tradeenergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returntosetup_tradeenergy = new Intent(tradeEnergy.this, setup_interface.class);
+                startActivity(returntosetup_tradeenergy);
+            }
+        });
+
+        update_tradeenergy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 receiveUpdates();
@@ -106,12 +119,12 @@ public class tradeEnergy extends AppCompatActivity {
         });
 
 
-//        BuyButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                confirmTransaction();
-//            }
-//        });
+        btb_tradeenergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmTransaction();
+            }
+        });
 
 
 //        OfferButton.setOnClickListener(new View.OnClickListener() {
@@ -201,8 +214,8 @@ public class tradeEnergy extends AppCompatActivity {
 
                     }
                     final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
-                    offerList.setAdapter(arrayAdapter);
-                    offerList.setOnItemClickListener(myOfferListClickListener);
+                    offerlist_tradeenergy.setAdapter(arrayAdapter);
+                    offerlist_tradeenergy.setOnItemClickListener(myOfferListClickListener);
 
                 }
             } catch (IOException ex) {
@@ -219,9 +232,13 @@ public class tradeEnergy extends AppCompatActivity {
             System.out.println(transactionInfo);
             String[]extractNodeID = transactionInfo.split("\n");
             int householdID = Integer.parseInt(extractNodeID[0]);
+
             Map<String, String> offerDetails = TRANSACTION_INFO.get(householdID);
             System.out.println(offerDetails.get("Price"));
+            price_tradeenergy.setText(offerDetails.get("Price"));
+            quantity_tradeenergy.setText(offerDetails.get("Quantity"));
             nodeIDSelected = householdID;
+
         }
     };
 
@@ -269,8 +286,8 @@ public class tradeEnergy extends AppCompatActivity {
                 btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Price").getBytes());
                 btSocket.getOutputStream().write('/');
 
-//                btSocket.getOutputStream().write(kWh.getText().toString().getBytes());
-                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Quantity").getBytes());
+                btSocket.getOutputStream().write(quantity_tradeenergy.getText().toString().getBytes());
+//                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Quantity").getBytes());
                 btSocket.getOutputStream().write('/');
 
                 btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Count").getBytes());
@@ -328,7 +345,7 @@ public class tradeEnergy extends AppCompatActivity {
             try {
                 if (btSocket == null || !isBtConnected) {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
+                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address_tradeenergy);//connects to the device's address and checks if it's available
                     btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                     btSocket.connect();//start connection

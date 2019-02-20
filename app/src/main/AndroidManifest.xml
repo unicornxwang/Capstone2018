@@ -23,10 +23,10 @@
         <activity android:name=".setup_interface" />
         <activity android:name=".sell_interface" />
         <activity android:name=".system_setup" />
-        <activity android:name=".buytobattery" />
         <activity android:name=".buytouse" />
         <activity android:name=".buytobattery_complete" />
-        <activity android:name=".buytouse_complete"></activity>
+        <activity android:name=".buytouse_complete" />
+        <activity android:name=".sell_complete"></activity>
     </application>
 
 </manifest>

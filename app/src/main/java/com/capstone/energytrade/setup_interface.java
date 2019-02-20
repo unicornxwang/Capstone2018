@@ -22,13 +22,15 @@ import java.util.UUID;
 
 public class setup_interface extends AppCompatActivity {
 
-    private Button batteryLevel;
-    private Button buyInterface;
-    private Button sellInterface;
-    private ImageButton setUp;
+    private ImageButton return_setup;
+    private Button batterylevel_setup;
+    private Button btb_setup;
+    private Button btu_setup;
+    private Button sell_setup;
+    private ImageButton setup_setup;
 
-    private TextView storage;
-    private TextView myBalance2;
+    private TextView storage_setup;
+    private TextView mybalance_setup;
 
     private InputStream stateofcharge = null;
 
@@ -41,7 +43,7 @@ public class setup_interface extends AppCompatActivity {
     private boolean isBtConnected = false;
     //SPP UUID. Look for it
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
+    //public static final String EXTRA_ADDRESS_btb = "device_address";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,27 +53,47 @@ public class setup_interface extends AppCompatActivity {
         address = newint.getStringExtra(btPairing.EXTRA_ADDRESS);
         new setup_interface.ConnectBT().execute();
 
-//        batteryLevel = (Button) findViewById(R.id.batteryLevel);
-//        buyInterface = (Button) findViewById(R.id.buyInterface);
-//        sellInterface = (Button) findViewById(R.id.sellInterface);
-//        setUp = (ImageButton) findViewById(R.id.setUp);
+        return_setup = (ImageButton) findViewById(R.id.return_setup);
+        batterylevel_setup = (Button) findViewById(R.id.batterylevel_setup);
+        btb_setup = (Button) findViewById(R.id.btb_setup);
+        btu_setup = (Button) findViewById(R.id.btu_setup);
+        sell_setup = (Button) findViewById(R.id.sell_setup);
+        setup_setup = (ImageButton) findViewById(R.id.setup_setup);
 
-        batteryLevel.setOnClickListener(new View.OnClickListener() {
+
+
+        return_setup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returntomain_setup = new Intent(setup_interface.this, btPairing.class);
+                startActivity(returntomain_setup);
+            }
+        });
+        batterylevel_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestStateofCharge();
             }
         });
 
-        buyInterface.setOnClickListener(new View.OnClickListener() {
+        btb_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent buyInterface = new Intent(setup_interface.this, tradeEnergy.class);
-                startActivity(buyInterface);
+                Intent btbInterface = new Intent(setup_interface.this, tradeEnergy.class);
+//                btbInterface.putExtra(EXTRA_ADDRESS_btb, address);
+                startActivity(btbInterface);
             }
         });
 
-        sellInterface.setOnClickListener(new View.OnClickListener() {
+        btu_setup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent btuInterface = new Intent(setup_interface.this, buytouse.class);
+                startActivity(btuInterface);
+            }
+        });
+
+        sell_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sellInterface = new Intent(setup_interface.this, sell_interface.class);
@@ -79,10 +101,11 @@ public class setup_interface extends AppCompatActivity {
             }
         });
 
-        setUp.setOnClickListener(new View.OnClickListener() {
+        setup_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent systemSetUp = new Intent(setup_interface.this, system_setup.class);
+                startActivity(systemSetUp);
             }
         });
     }
