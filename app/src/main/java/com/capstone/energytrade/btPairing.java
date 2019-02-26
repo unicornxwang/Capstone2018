@@ -87,7 +87,8 @@ public class btPairing extends AppCompatActivity {
             // Make an intent to start next activity.
             Intent i = new Intent(btPairing.this, setup_interface.class);
             //Change the activity.
-            i.putExtra(EXTRA_ADDRESS, address); //this will be received at ledControl (class) Activity
+            BluetoothApplication.getApplication().setupBluetoothConnection(address);
+//            i.putExtra(EXTRA_ADDRESS, address);//this will be received at ledControl (class) Activity
             startActivity(i);
         }
     };

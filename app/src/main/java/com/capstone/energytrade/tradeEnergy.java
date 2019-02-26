@@ -51,15 +51,16 @@ public class tradeEnergy extends AppCompatActivity {
 
     private ListView offerlist_tradeenergy;
 
+    private BluetoothSocket btSocket_tradeenergy = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
-    BluetoothAdapter myBluetooth = null;
-    BluetoothSocket btSocket = null;
+//    BluetoothAdapter myBluetooth = null;
+//    BluetoothSocket btSocket = null;
 
     String address_tradeenergy = null;
-    private boolean isBtConnected = false;
+    private boolean isBtConnected_tradeenergy = false;
     //SPP UUID. Look for it
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private ProgressDialog progress;
+    private ProgressDialog progress_tradeenergy;
     private InputStream inStream = null;
 
     int readBufferPosition = 0;
@@ -72,9 +73,9 @@ public class tradeEnergy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade_energy);
-        Intent newint = getIntent();
-        address_tradeenergy = newint.getStringExtra(btPairing.EXTRA_ADDRESS);
-        new ConnectBT().execute();
+        Intent newint_tradeenergy = getIntent();
+        address_tradeenergy = newint_tradeenergy.getStringExtra(setup_interface.EXTRA_ADDRESS_btb);
+//        new tradeEnergy.ConnectBT().execute();
 
         return_tradeenergy = (ImageButton) findViewById(R.id.return_tradeenergy);
         btb_tradeenergy = (Button) findViewById(R.id.btb_tradeenergy);
@@ -106,8 +107,7 @@ public class tradeEnergy extends AppCompatActivity {
         return_tradeenergy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returntosetup_tradeenergy = new Intent(tradeEnergy.this, setup_interface.class);
-                startActivity(returntosetup_tradeenergy);
+                finish();
             }
         });
 
@@ -122,6 +122,8 @@ public class tradeEnergy extends AppCompatActivity {
         btb_tradeenergy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent btbc = new Intent(tradeEnergy.this, buytobattery_complete.class);
+                startActivity(btbc);
                 confirmTransaction();
             }
         });
@@ -150,11 +152,11 @@ public class tradeEnergy extends AppCompatActivity {
     //Multiple offer//
     private void receiveUpdates()
     {
-        if (btSocket != null) {
+        if (btSocket_tradeenergy != null) {
             try {
-                btSocket.getOutputStream().write('1');
-                btSocket.getOutputStream().write('\n');
-                inStream = btSocket.getInputStream();
+                btSocket_tradeenergy.getOutputStream().write('1');
+                btSocket_tradeenergy.getOutputStream().write('\n');
+                inStream = btSocket_tradeenergy.getInputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -266,37 +268,37 @@ public class tradeEnergy extends AppCompatActivity {
 
     private void confirmTransaction()
     {
-        if (btSocket != null){
+        if (btSocket_tradeenergy != null){
             try{
-                btSocket.getOutputStream().write('2');
-                btSocket.getOutputStream().write('/');
+                btSocket_tradeenergy.getOutputStream().write('2');
+                btSocket_tradeenergy.getOutputStream().write('/');
 
 
                 if(nodeIDSelected<10){
-                    btSocket.getOutputStream().write('0');
-                    btSocket.getOutputStream().write(nodeIDSelected.toString().getBytes());
+                    btSocket_tradeenergy.getOutputStream().write('0');
+                    btSocket_tradeenergy.getOutputStream().write(nodeIDSelected.toString().getBytes());
                 }
                 else {
-                    btSocket.getOutputStream().write(nodeIDSelected.toString().getBytes());
+                    btSocket_tradeenergy.getOutputStream().write(nodeIDSelected.toString().getBytes());
                 }
 
 
-                btSocket.getOutputStream().write('/');
+                btSocket_tradeenergy.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Price").getBytes());
-                btSocket.getOutputStream().write('/');
+                btSocket_tradeenergy.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Price").getBytes());
+                btSocket_tradeenergy.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write(quantity_tradeenergy.getText().toString().getBytes());
+                btSocket_tradeenergy.getOutputStream().write(quantity_tradeenergy.getText().toString().getBytes());
 //                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Quantity").getBytes());
-                btSocket.getOutputStream().write('/');
+                btSocket_tradeenergy.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Count").getBytes());
-                btSocket.getOutputStream().write('/');
+                btSocket_tradeenergy.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Count").getBytes());
+                btSocket_tradeenergy.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Path").getBytes());
+                btSocket_tradeenergy.getOutputStream().write(TRANSACTION_INFO.get(nodeIDSelected).get("Path").getBytes());
 //                btSocket.getOutputStream().write('/');
 
-                btSocket.getOutputStream().write('\n');
+                btSocket_tradeenergy.getOutputStream().write('\n');
 
             }catch(IOException e) {
                 msg("Error");
@@ -307,69 +309,69 @@ public class tradeEnergy extends AppCompatActivity {
     private void msg(String s) {
         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_trade_energy, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
-    {
-        private boolean ConnectSuccess = true; //if it's here, it's almost connected
-
-        @Override
-        protected void onPreExecute() {
-            progress = ProgressDialog.show(tradeEnergy.this, "Connecting...", "Please wait!!!");  //show a progress dialog
-        }
-
-        @Override
-        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
-        {
-            try {
-                if (btSocket == null || !isBtConnected) {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address_tradeenergy);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();//start connection
-
-                }
-            } catch (IOException e) {
-                ConnectSuccess = false;//if the try failed, you can check the exception here
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-
-            if (!ConnectSuccess) {
-                msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
-                finish();
-            } else {
-                msg("Connected.");
-                isBtConnected = true;
-            }
-            progress.dismiss();
-        }
-    }
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_trade_energy, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
+//    {
+//        private boolean ConnectSuccess = true; //if it's here, it's almost connected
+//
+//        @Override
+//        protected void onPreExecute() {
+//            progress_tradeenergy = ProgressDialog.show(tradeEnergy.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+//        {
+//            try {
+//                if (btSocket == null || !isBtConnected_tradeenergy) {
+//                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
+//                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address_tradeenergy);//connects to the device's address and checks if it's available
+//                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
+//                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+//                    btSocket.connect();//start connection
+//
+//                }
+//            } catch (IOException e) {
+//                ConnectSuccess = false;//if the try failed, you can check the exception here
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+//        {
+//            super.onPostExecute(result);
+//
+//            if (!ConnectSuccess) {
+//                msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
+//                finish();
+//            } else {
+//                msg("Connected.");
+//                isBtConnected_tradeenergy = true;
+//            }
+//            progress_tradeenergy.dismiss();
+//        }
+//    }
 }
