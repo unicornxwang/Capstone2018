@@ -45,9 +45,10 @@ public class tradeEnergy extends AppCompatActivity {
     private TextView text1_tradeenergy;
     private TextView text2_tradeenergy;
     private TextView text3_tradeenergy;
+    private TextView price_tradeenergy;
 
     private EditText quantity_tradeenergy;
-    private EditText price_tradeenergy;
+
 
     private ListView offerlist_tradeenergy;
 
@@ -82,7 +83,7 @@ public class tradeEnergy extends AppCompatActivity {
         update_tradeenergy = (Button) findViewById(R.id.update_tradeenergy);
 
         quantity_tradeenergy = (EditText) findViewById(R.id.quantity_tradeenergy);
-        price_tradeenergy = (EditText) findViewById(R.id.price_tradeenergy);
+        price_tradeenergy = (TextView) findViewById(R.id.price_tradeenergy);
 
         offerlist_tradeenergy = (ListView) findViewById(R.id.offerlist_tradeenergy);
 
@@ -238,6 +239,7 @@ public class tradeEnergy extends AppCompatActivity {
             Map<String, String> offerDetails = TRANSACTION_INFO.get(householdID);
             System.out.println(offerDetails.get("Price"));
             price_tradeenergy.setText(offerDetails.get("Price"));
+            
             quantity_tradeenergy.setText(offerDetails.get("Quantity"));
             nodeIDSelected = householdID;
 

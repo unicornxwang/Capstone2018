@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -46,11 +47,15 @@ public class BluetoothApplication extends Application {
                 }
             } catch (IOException e) {
                 ConnectSuccess = false;//if the try failed, you can check the exception here
+                msg("Bluetooth Connection Failed.");
             }
     }
 
     public BluetoothSocket getCurrentBluetoothConnection()
     {
         return btSocket;
+    }
+    private void msg(String s) {
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 }

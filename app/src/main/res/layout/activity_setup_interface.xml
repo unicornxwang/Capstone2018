@@ -9,15 +9,15 @@
     <Button
         android:id="@+id/batterylevel_setup"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="448dp"
-        android:text="Battery Level"
+        android:layout_marginBottom="412dp"
+        android:text="Check Battery Level"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.352"
+        app:layout_constraintHorizontal_bias="0.393"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -53,7 +53,7 @@
         app:layout_constraintHorizontal_bias="0.302"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.283" />
 
     <Button
         android:id="@+id/btb_setup"
@@ -62,7 +62,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="164dp"
         android:layout_marginEnd="8dp"
-        android:text="Buy to Battery"
+        android:text="Buy to Storage"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
