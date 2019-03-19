@@ -65,6 +65,7 @@ public class sell_interface extends AppCompatActivity {
 //                        msg("Please enter a valid number");
 //                        return;
 //                }
+                system_status.sellStatus = false;
                 Intent nextpage_sell = new Intent(sell_interface.this, sell_complete.class);
                 startActivity(nextpage_sell);
             }

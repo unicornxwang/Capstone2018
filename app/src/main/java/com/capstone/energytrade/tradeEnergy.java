@@ -58,24 +58,24 @@ public class tradeEnergy extends AppCompatActivity {
 //    BluetoothSocket btSocket = null;
 
     String address_tradeenergy = null;
-    private boolean isBtConnected_tradeenergy = false;
+//    private boolean isBtConnected_tradeenergy = false;
     //SPP UUID. Look for it
-    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+//    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private ProgressDialog progress_tradeenergy;
     private InputStream inStream = null;
 
     int readBufferPosition = 0;
     byte[] readBuffer = new byte[1024];
 
-    public static final String btbOfferPrice = "btbOfferPrice";
-    public static final String btbOfferQuantity = "btbOfferQuantity";
+//    public static final String btbOfferPrice = "btbOfferPrice";
+//    public static final String btbOfferQuantity = "btbOfferQuantity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trade_energy);
-        Intent newint_tradeenergy = getIntent();
-        address_tradeenergy = newint_tradeenergy.getStringExtra(setup_interface.EXTRA_ADDRESS_btb);
+//        Intent newint_tradeenergy = getIntent();
+//        address_tradeenergy = newint_tradeenergy.getStringExtra(setup_interface.EXTRA_ADDRESS_btb);
 //        new tradeEnergy.ConnectBT().execute();
 
         return_tradeenergy = (ImageButton) findViewById(R.id.return_tradeenergy);
@@ -84,7 +84,6 @@ public class tradeEnergy extends AppCompatActivity {
 
         quantity_tradeenergy = (EditText) findViewById(R.id.quantity_tradeenergy);
         price_tradeenergy = (TextView) findViewById(R.id.price_tradeenergy);
-
         offerlist_tradeenergy = (ListView) findViewById(R.id.offerlist_tradeenergy);
 
 

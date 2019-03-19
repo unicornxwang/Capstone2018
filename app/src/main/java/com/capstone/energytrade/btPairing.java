@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class btPairing extends AppCompatActivity {
 
-    public static final String EXTRA_ADDRESS = "device_address";
+//    public static final String EXTRA_ADDRESS = "device_address";
     private Set<BluetoothDevice> pairedDevices;
     private BluetoothAdapter myBluetooth = null;
     Button btnPaired;

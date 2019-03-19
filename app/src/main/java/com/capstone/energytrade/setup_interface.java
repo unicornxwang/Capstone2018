@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,31 +29,28 @@ public class setup_interface extends AppCompatActivity {
     private TextView storage_setup;
 
     private InputStream stateofcharge = null;
+    private ProgressBar progress_setup;
 
-    private ProgressDialog progress;
-
-    BluetoothAdapter myBluetooth = null;
+//    private ProgressDialog progress;
+//
+//    BluetoothAdapter myBluetooth = null;
     private BluetoothSocket btSocket_setup = null;
-
-    private String address_setup = null;
-    public static final String EXTRA_ADDRESS_btb = "Device Address btb";
+    private InputStream inStream_setup = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_interface);
         Intent newint = getIntent();
-        address_setup = newint.getStringExtra(btPairing.EXTRA_ADDRESS);
         btSocket_setup = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
-
         return_setup = (ImageButton) findViewById(R.id.return_setup);
         batterylevel_setup = (Button) findViewById(R.id.batterylevel_setup);
         btb_setup = (Button) findViewById(R.id.btb_setup);
         btu_setup = (Button) findViewById(R.id.btu_setup);
         sell_setup = (Button) findViewById(R.id.sell_setup);
         setup_setup = (ImageButton) findViewById(R.id.setup_setup);
-
-
+        storage_setup = (TextView) findViewById(R.id.storage_setup);
+        progress_setup = (ProgressBar) findViewById(R.id.progress_setup);
 
         return_setup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +59,7 @@ public class setup_interface extends AppCompatActivity {
                 startActivity(returntomain_setup);
             }
         });
+
         batterylevel_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,8 +70,9 @@ public class setup_interface extends AppCompatActivity {
         btb_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent btbInterface = new Intent(setup_interface.this, tradeEnergy.class);
-                btbInterface.putExtra(EXTRA_ADDRESS_btb, address_setup);
+//                btbInterface.putExtra(EXTRA_ADDRESS_btb, address_setup);
                 startActivity(btbInterface);
             }
         });
@@ -88,8 +88,16 @@ public class setup_interface extends AppCompatActivity {
         sell_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(system_status.sellStatus = true)
+                {
                 Intent sellInterface = new Intent(setup_interface.this, sell_interface.class);
                 startActivity(sellInterface);
+                }
+                if(system_status.sellStatus = false)
+                {
+                    Intent sellcomplete = new Intent(setup_interface.this, sell_complete.class);
+                    startActivity(sellcomplete);
+                }
             }
         });
 
@@ -108,8 +116,17 @@ public class setup_interface extends AppCompatActivity {
             {
                 btSocket_setup.getOutputStream().write('4');
                 btSocket_setup.getOutputStream().write('\n');
-                stateofcharge = btSocket_setup.getInputStream();
-                storage_setup.setText((CharSequence) stateofcharge);
+                inStream_setup = btSocket_setup.getInputStream();
+                int inStreamAvailable = inStream_setup.available();
+                if (inStreamAvailable > 0)
+                {
+                    byte[]packetBytes_setup = new byte[inStreamAvailable];
+                    inStream_setup.read(packetBytes_setup);
+                    String[] socInfo = new String (packetBytes_setup).split("/");
+                    String stateofcharge = socInfo [2];
+                    storage_setup.setText(stateofcharge + "%");
+                    progress_setup.setProgress(Integer.parseInt(stateofcharge));
+                }
             }
             catch (IOException E)
             {

@@ -14,6 +14,7 @@ import java.io.IOException;
 public class sell_complete extends AppCompatActivity {
 
     private TextView text1_sellcomplete;
+    private Button main_sellcomplete;
     private Button stop_sellcomplete;
     private BluetoothSocket btSocket_sellcomplete = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
@@ -24,6 +25,15 @@ public class sell_complete extends AppCompatActivity {
 
         text1_sellcomplete = (TextView) findViewById(R.id.text1_sellcomplete);
         stop_sellcomplete = (Button) findViewById(R.id.stop_sellcomplete);
+        main_sellcomplete = (Button) findViewById(R.id.main_sellcomplete);
+
+        main_sellcomplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent rtm_sellcomplete = new Intent(sell_complete.this, setup_interface.class);
+                startActivity(rtm_sellcomplete);
+            }
+        });
 
         stop_sellcomplete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,6 +48,7 @@ public class sell_complete extends AppCompatActivity {
                         msg("Error");
                     }
                 }
+                system_status.sellStatus = true;
                 finish();
             }
         });

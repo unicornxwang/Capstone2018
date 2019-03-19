@@ -17,6 +17,7 @@ public class system_setup extends AppCompatActivity {
 
     private Button update_system;
     private ImageButton return_system;
+    private EditText myport_system;
     private EditText batterysize_system;
     private EditText port1_system;
     private EditText port2_system;
@@ -26,6 +27,7 @@ public class system_setup extends AppCompatActivity {
     private TextView text3_system;
     private TextView text4_system;
     private TextView text5_system;
+    private TextView text6_system;
     private BluetoothSocket btSocket_system = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
 
@@ -37,9 +39,11 @@ public class system_setup extends AppCompatActivity {
         update_system = (Button) findViewById(R.id.update_system);
         return_system = (ImageButton) findViewById(R.id.return_system);
         batterysize_system = (EditText)findViewById(R.id.batterysize_system);
+        myport_system = (EditText) findViewById(R.id.myport_system);
         port1_system = (EditText)findViewById(R.id.port1_system);
         port2_system = (EditText)findViewById(R.id.port2_system);
         port3_system = (EditText)findViewById(R.id.port3_system);
+
 
         return_system.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +67,9 @@ public class system_setup extends AppCompatActivity {
         if(btSocket_system != null){
             try{
                 btSocket_system.getOutputStream().write('3');
+                btSocket_system.getOutputStream().write('/');
+
+                btSocket_system.getOutputStream().write(myport_system.getText().toString().getBytes());
                 btSocket_system.getOutputStream().write('/');
 
                 btSocket_system.getOutputStream().write(batterysize_system.getText().toString().getBytes());

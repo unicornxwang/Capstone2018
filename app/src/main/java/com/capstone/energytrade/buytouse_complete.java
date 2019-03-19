@@ -14,6 +14,7 @@ import java.io.IOException;
 public class buytouse_complete extends AppCompatActivity {
 
     private TextView text1_btuc;
+    private Button main_btuc;
     private Button cancel_btuc;
     private BluetoothSocket btSocket_btuc = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
@@ -23,7 +24,16 @@ public class buytouse_complete extends AppCompatActivity {
         setContentView(R.layout.activity_buytouse_complete);
 
         text1_btuc = (TextView) findViewById(R.id.text1_btuc);
+        main_btuc = (Button) findViewById(R.id.main_btuc);
         cancel_btuc = (Button) findViewById(R.id.cancel_btuc);
+
+        main_btuc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent rtm_btuc = new Intent(buytouse_complete.this, setup_interface.class);
+                startActivity(rtm_btuc);
+            }
+        });
 
         cancel_btuc.setOnClickListener(new View.OnClickListener() {
             @Override
