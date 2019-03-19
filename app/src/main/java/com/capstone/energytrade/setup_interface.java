@@ -52,6 +52,8 @@ public class setup_interface extends AppCompatActivity {
         storage_setup = (TextView) findViewById(R.id.storage_setup);
         progress_setup = (ProgressBar) findViewById(R.id.progress_setup);
 
+        requestStateofCharge();
+
         return_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,12 +62,12 @@ public class setup_interface extends AppCompatActivity {
             }
         });
 
-        batterylevel_setup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestStateofCharge();
-            }
-        });
+//        batterylevel_setup.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestStateofCharge();
+//            }
+//        });
 
         btb_setup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +116,7 @@ public class setup_interface extends AppCompatActivity {
                 if(btSocket_setup!=null){
             try
             {
-                btSocket_setup.getOutputStream().write('4');
+                btSocket_setup.getOutputStream().write('7');
                 btSocket_setup.getOutputStream().write('\n');
                 inStream_setup = btSocket_setup.getInputStream();
                 int inStreamAvailable = inStream_setup.available();
@@ -122,8 +124,10 @@ public class setup_interface extends AppCompatActivity {
                 {
                     byte[]packetBytes_setup = new byte[inStreamAvailable];
                     inStream_setup.read(packetBytes_setup);
+                    System.out.println(packetBytes_setup);
                     String[] socInfo = new String (packetBytes_setup).split("/");
                     String stateofcharge = socInfo [2];
+                    System.out.println(socInfo);
                     storage_setup.setText(stateofcharge + "%");
                     progress_setup.setProgress(Integer.parseInt(stateofcharge));
                 }

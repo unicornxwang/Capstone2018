@@ -56,12 +56,12 @@ public class tradeEnergy extends AppCompatActivity {
 
 //    BluetoothAdapter myBluetooth = null;
 //    BluetoothSocket btSocket = null;
-
-    String address_tradeenergy = null;
+//    String address_tradeenergy = null;
 //    private boolean isBtConnected_tradeenergy = false;
     //SPP UUID. Look for it
 //    static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private ProgressDialog progress_tradeenergy;
+//    private ProgressDialog progress_tradeenergy;
+
     private InputStream inStream = null;
 
     int readBufferPosition = 0;
@@ -176,7 +176,7 @@ public class tradeEnergy extends AppCompatActivity {
                             //char btoString = (char) b;
                             System.out.println((char) b);
                         }
-                        //System.out.println(new String(readBuffer));
+                        System.out.println(new String(readBuffer));
                     }
                     byte[] encodedBytes = new byte[readBufferPosition];
                     System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
