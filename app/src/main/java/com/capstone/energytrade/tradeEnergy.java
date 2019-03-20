@@ -27,6 +27,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.Map;
 import java.util.HashMap;
@@ -161,68 +163,139 @@ public class tradeEnergy extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            try
-            {
-                int bytesAvailable = inStream.available();
-                if (bytesAvailable > 0) {
-                    byte[] packetBytes = new byte[bytesAvailable];
-                    System.out.println(bytesAvailable);
-                    inStream.read(packetBytes);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try
+                    {
+                        int bytesAvailable = inStream.available();
+                        if (bytesAvailable > 0) {
+                            byte[] packetBytes = new byte[bytesAvailable];
+                            System.out.println(bytesAvailable);
+                            inStream.read(packetBytes);
 
-                    for (int i = 0; i < bytesAvailable; i++) {
-                        byte b = packetBytes[i];
-                        if( b != 0) {
-                            readBuffer[readBufferPosition++] = b;
-                            //char btoString = (char) b;
-                            System.out.println((char) b);
+                            for (int i = 0; i < bytesAvailable; i++) {
+                                byte b = packetBytes[i];
+                                if( b != 0) {
+                                    readBuffer[readBufferPosition++] = b;
+                                    //char btoString = (char) b;
+                                    System.out.println((char) b);
+                                }
+                                System.out.println(new String(readBuffer));
+                            }
+                            byte[] encodedBytes = new byte[readBufferPosition];
+                            System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+
+                            String[] offerOption = new String(encodedBytes).split("\n");
+                            ArrayList<String> offer_list = new ArrayList<String>();
+                            TRANSACTION_INFO = new HashMap<Integer, Map<String,String>>();
+                            for(int i=0; i < offerOption.length;i++) {
+                                String[] offerInformation = offerOption[i].split("/");
+
+                                if (offerInformation.length >= 6) {
+                                    String signal = offerInformation[0];
+                                    System.out.println(signal);
+                                    String nodeID = offerInformation[1];
+                                    System.out.println(nodeID);
+                                    String price = offerInformation[2];
+                                    System.out.println(price);
+                                    String quantity = offerInformation[3];
+                                    System.out.println(quantity);
+                                    String count = offerInformation[4];
+                                    System.out.println(count);
+                                    String path = offerInformation[5];
+                                    System.out.println(path);
+
+                                    Map<String,String> offerDetails = new HashMap<String,String>();
+                                    offerDetails.put("Price",price);
+                                    offerDetails.put("Quantity", quantity);
+                                    offerDetails.put("Count", count);
+                                    offerDetails.put("Path", path);
+
+                                    int householdID = Integer.parseInt(nodeID);
+                                    TRANSACTION_INFO.put(householdID,offerDetails);
+                                    offer_list.add(nodeID + '\n' + "Price:" + price + " Quantity:" + quantity);
+
+                                }
+
+
+                            }
+                            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(tradeEnergy.this, android.R.layout.simple_list_item_1, offer_list);
+                            offerlist_tradeenergy.setAdapter(arrayAdapter);
+                            offerlist_tradeenergy.setOnItemClickListener(myOfferListClickListener);
+
                         }
-                        System.out.println(new String(readBuffer));
-                    }
-                    byte[] encodedBytes = new byte[readBufferPosition];
-                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
-
-                    String[] offerOption = new String(encodedBytes).split("\n");
-                    ArrayList<String> offer_list = new ArrayList<String>();
-                    TRANSACTION_INFO = new HashMap<Integer, Map<String,String>>();
-                    for(int i=0; i < offerOption.length;i++) {
-                        String[] offerInformation = offerOption[i].split("/");
-
-                       if (offerInformation.length >= 6) {
-                           String signal = offerInformation[0];
-                           System.out.println(signal);
-                           String nodeID = offerInformation[1];
-                           System.out.println(nodeID);
-                           String price = offerInformation[2];
-                           System.out.println(price);
-                           String quantity = offerInformation[3];
-                           System.out.println(quantity);
-                           String count = offerInformation[4];
-                           System.out.println(count);
-                           String path = offerInformation[5];
-                           System.out.println(path);
-
-                           Map<String,String> offerDetails = new HashMap<String,String>();
-                           offerDetails.put("Price",price);
-                           offerDetails.put("Quantity", quantity);
-                           offerDetails.put("Count", count);
-                           offerDetails.put("Path", path);
-
-                           int householdID = Integer.parseInt(nodeID);
-                           TRANSACTION_INFO.put(householdID,offerDetails);
-                           offer_list.add(nodeID + '\n' + "Price:" + price + " Quantity:" + quantity);
-
-                       }
-
+                    } catch (IOException ex) {
 
                     }
-                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
-                    offerlist_tradeenergy.setAdapter(arrayAdapter);
-                    offerlist_tradeenergy.setOnItemClickListener(myOfferListClickListener);
 
                 }
-            } catch (IOException ex) {
+            },1000);
 
-            }
+
+//            try
+//            {
+//                int bytesAvailable = inStream.available();
+//                if (bytesAvailable > 0) {
+//                    byte[] packetBytes = new byte[bytesAvailable];
+//                    System.out.println(bytesAvailable);
+//                    inStream.read(packetBytes);
+//
+//                    for (int i = 0; i < bytesAvailable; i++) {
+//                        byte b = packetBytes[i];
+//                        if( b != 0) {
+//                            readBuffer[readBufferPosition++] = b;
+//                            //char btoString = (char) b;
+//                            System.out.println((char) b);
+//                        }
+//                        System.out.println(new String(readBuffer));
+//                    }
+//                    byte[] encodedBytes = new byte[readBufferPosition];
+//                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+//
+//                    String[] offerOption = new String(encodedBytes).split("\n");
+//                    ArrayList<String> offer_list = new ArrayList<String>();
+//                    TRANSACTION_INFO = new HashMap<Integer, Map<String,String>>();
+//                    for(int i=0; i < offerOption.length;i++) {
+//                        String[] offerInformation = offerOption[i].split("/");
+//
+//                       if (offerInformation.length >= 6) {
+//                           String signal = offerInformation[0];
+//                           System.out.println(signal);
+//                           String nodeID = offerInformation[1];
+//                           System.out.println(nodeID);
+//                           String price = offerInformation[2];
+//                           System.out.println(price);
+//                           String quantity = offerInformation[3];
+//                           System.out.println(quantity);
+//                           String count = offerInformation[4];
+//                           System.out.println(count);
+//                           String path = offerInformation[5];
+//                           System.out.println(path);
+//
+//                           Map<String,String> offerDetails = new HashMap<String,String>();
+//                           offerDetails.put("Price",price);
+//                           offerDetails.put("Quantity", quantity);
+//                           offerDetails.put("Count", count);
+//                           offerDetails.put("Path", path);
+//
+//                           int householdID = Integer.parseInt(nodeID);
+//                           TRANSACTION_INFO.put(householdID,offerDetails);
+//                           offer_list.add(nodeID + '\n' + "Price:" + price + " Quantity:" + quantity);
+//
+//                       }
+//
+//
+//                    }
+//                    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, offer_list);
+//                    offerlist_tradeenergy.setAdapter(arrayAdapter);
+//                    offerlist_tradeenergy.setOnItemClickListener(myOfferListClickListener);
+//
+//                }
+//            } catch (IOException ex) {
+//
+//            }
         }
     }
 

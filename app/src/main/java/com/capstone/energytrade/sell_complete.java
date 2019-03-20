@@ -15,6 +15,7 @@ public class sell_complete extends AppCompatActivity {
 
     private TextView text1_sellcomplete;
     private Button main_sellcomplete;
+    private Button CT_sellcomplete;
     private Button stop_sellcomplete;
     private BluetoothSocket btSocket_sellcomplete = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
@@ -23,15 +24,35 @@ public class sell_complete extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sell_complete);
 
-        text1_sellcomplete = (TextView) findViewById(R.id.text1_sellcomplete);
-        stop_sellcomplete = (Button) findViewById(R.id.stop_sellcomplete);
-        main_sellcomplete = (Button) findViewById(R.id.main_sellcomplete);
+        text1_sellcomplete = findViewById(R.id.text1_sellcomplete);
+        stop_sellcomplete = findViewById(R.id.stop_sellcomplete);
+        main_sellcomplete = findViewById(R.id.main_sellcomplete);
+        CT_sellcomplete = findViewById(R.id.CT_sellcomplete);
 
         main_sellcomplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent rtm_sellcomplete = new Intent(sell_complete.this, setup_interface.class);
                 startActivity(rtm_sellcomplete);
+            }
+        });
+
+        CT_sellcomplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(btSocket_sellcomplete != null)
+                {
+                    try
+                    {
+                        btSocket_sellcomplete.getOutputStream().write('5');
+                        btSocket_sellcomplete.getOutputStream().write('\n');
+                    } catch (IOException e)
+                    {
+                        msg("Error");
+                    }
+                }
+                system_status.sellStatus = true;
+                finish();
             }
         });
 

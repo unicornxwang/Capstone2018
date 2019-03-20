@@ -47,7 +47,7 @@ public class buytouse_complete extends AppCompatActivity {
                     }
 
                 }
-
+                system_status.btuStatus = true;
                 finish();
             }
         });

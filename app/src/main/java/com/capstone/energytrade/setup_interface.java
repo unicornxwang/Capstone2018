@@ -15,12 +15,14 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class setup_interface extends AppCompatActivity {
 
     private ImageButton return_setup;
-    private Button batterylevel_setup;
+//    private Button batterylevel_setup;
     private Button btb_setup;
     private Button btu_setup;
     private Button sell_setup;
@@ -44,7 +46,6 @@ public class setup_interface extends AppCompatActivity {
         Intent newint = getIntent();
         btSocket_setup = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
         return_setup = (ImageButton) findViewById(R.id.return_setup);
-        batterylevel_setup = (Button) findViewById(R.id.batterylevel_setup);
         btb_setup = (Button) findViewById(R.id.btb_setup);
         btu_setup = (Button) findViewById(R.id.btu_setup);
         sell_setup = (Button) findViewById(R.id.sell_setup);
@@ -74,7 +75,6 @@ public class setup_interface extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent btbInterface = new Intent(setup_interface.this, tradeEnergy.class);
-//                btbInterface.putExtra(EXTRA_ADDRESS_btb, address_setup);
                 startActivity(btbInterface);
             }
         });
@@ -82,20 +82,29 @@ public class setup_interface extends AppCompatActivity {
         btu_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent btuInterface = new Intent(setup_interface.this, buytouse.class);
-                startActivity(btuInterface);
+                if(system_status.btuStatus)
+                {
+                    Intent btuInterface = new Intent(setup_interface.this, buytouse.class);
+                    startActivity(btuInterface);
+                }
+                else {
+                    Intent btucInterface = new Intent(setup_interface.this, buytouse_complete.class);
+                    startActivity(btucInterface);
+                }
+
             }
         });
 
         sell_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(system_status.sellStatus = true)
+                if(system_status.sellStatus)
                 {
-                Intent sellInterface = new Intent(setup_interface.this, sell_interface.class);
-                startActivity(sellInterface);
+                    Intent sellInterface = new Intent(setup_interface.this, sell_interface.class);
+                    startActivity(sellInterface);
+
                 }
-                if(system_status.sellStatus = false)
+                else
                 {
                     Intent sellcomplete = new Intent(setup_interface.this, sell_complete.class);
                     startActivity(sellcomplete);
@@ -114,24 +123,68 @@ public class setup_interface extends AppCompatActivity {
 
     private void requestStateofCharge() {
                 if(btSocket_setup!=null){
-            try
-            {
-                btSocket_setup.getOutputStream().write('7');
-                btSocket_setup.getOutputStream().write('\n');
-                inStream_setup = btSocket_setup.getInputStream();
-                int inStreamAvailable = inStream_setup.available();
-                if (inStreamAvailable > 0)
-                {
-                    byte[]packetBytes_setup = new byte[inStreamAvailable];
-                    inStream_setup.read(packetBytes_setup);
-                    System.out.println(packetBytes_setup);
-                    String[] socInfo = new String (packetBytes_setup).split("/");
-                    String stateofcharge = socInfo [2];
-                    System.out.println(socInfo);
-                    storage_setup.setText(stateofcharge + "%");
-                    progress_setup.setProgress(Integer.parseInt(stateofcharge));
-                }
-            }
+                    try
+                    {
+                        btSocket_setup.getOutputStream().write('7');
+                        btSocket_setup.getOutputStream().write('\n');
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+
+                            public void run()
+                            {
+                                runOnUiThread(new Runnable()
+                                {
+                                    @Override
+                                    public void run()
+                                    {
+                                        try
+                                        {
+                                            inStream_setup = btSocket_setup.getInputStream();
+                                            int inStreamAvailable = inStream_setup.available();
+                                            if (inStreamAvailable > 0)
+                                            {
+                                                byte[]packetBytes_setup = new byte[inStreamAvailable];
+                                                inStream_setup.read(packetBytes_setup);
+                                                System.out.println(packetBytes_setup);
+                                                String[] socInfo = new String (packetBytes_setup).split("/");
+                                                String stateofcharge = socInfo[1].trim();
+                                                System.out.println(socInfo);
+                                                storage_setup.setText(stateofcharge + "%");
+
+                                                progress_setup.setProgress(Math.round(Float.parseFloat(stateofcharge)));
+                                            }
+                                        }
+                                        catch (IOException E)
+                                        {
+                                            msg("Error");
+                                        }
+                                    }
+                                });
+
+                            }
+
+                        },1000);//Update text every second
+
+                    }
+//            try
+//            {
+//                btSocket_setup.getOutputStream().write('7');
+//                btSocket_setup.getOutputStream().write('\n');
+//                inStream_setup = btSocket_setup.getInputStream();
+//                int inStreamAvailable = inStream_setup.available();
+//                if (inStreamAvailable > 0)
+//                {
+//                    byte[]packetBytes_setup = new byte[inStreamAvailable];
+//                    inStream_setup.read(packetBytes_setup);
+//                    System.out.println(packetBytes_setup);
+//                    String[] socInfo = new String (packetBytes_setup).split("/");
+//                    String stateofcharge = socInfo [2];
+//                    System.out.println(socInfo);
+//                    storage_setup.setText(stateofcharge + "%");
+//                    progress_setup.setProgress(Integer.parseInt(stateofcharge));
+//                }
+//            }
             catch (IOException E)
             {
                 msg("Error");

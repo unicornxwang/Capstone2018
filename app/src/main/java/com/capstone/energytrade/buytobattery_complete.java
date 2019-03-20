@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.Buffer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class buytobattery_complete extends AppCompatActivity {
 
@@ -54,27 +56,70 @@ public class buytobattery_complete extends AppCompatActivity {
     }
 
     private void progressCheck() {
-        if (btSocket_btbc != null) {
+        if(btSocket_btbc!=null) {
             try {
-                btSocket_btbc.getOutputStream().write('4');
+                btSocket_btbc.getOutputStream().write('7');
                 btSocket_btbc.getOutputStream().write('\n');
-                inStream_btbc = btSocket_btbc.getInputStream();
-                int inStreamAvailable_btbc = inStream_btbc.available();
-                if (inStreamAvailable_btbc > 0) {
-                    byte[] packetBytes_btbc = new byte[inStreamAvailable_btbc];
-                    inStream_btbc.read(packetBytes_btbc);
-                    String[] socInfo = new String(packetBytes_btbc).split("/");
-                    String stateofcharge_btbc = socInfo[2];
-                    text1_btbc.setText(stateofcharge_btbc + "%");
-                    progressbar_btbc.setProgress(Integer.parseInt(stateofcharge_btbc));
-                }
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try
+                                {
+                                    inStream_btbc = btSocket_btbc.getInputStream();
+                                    int inStreamAvailable = inStream_btbc.available();
+                                    if (inStreamAvailable > 0) {
+                                        byte[] packetBytes_btbc = new byte[inStreamAvailable];
+                                        inStream_btbc.read(packetBytes_btbc);
+                                        System.out.println(packetBytes_btbc);
+                                        String[] socInfo = new String(packetBytes_btbc).split("/");
+                                        String stateofcharge_btbc = socInfo[1].trim();
+                                        System.out.println(socInfo);
+                                        text1_btbc.setText(stateofcharge_btbc + "%");
 
+                                        progressbar_btbc.setProgress(Math.round(Float.parseFloat(stateofcharge_btbc)));
+                                    }
+                                } catch (IOException E)
+                                {
+                                    msg("Error");
+                                }
+                            }
+                        });
+
+                    }
+
+                }, 1000);//Update text every second
 
             }catch (IOException e)
             {
                 msg("Error");
             }
         }
+//        if (btSocket_btbc != null) {
+//            try {
+//                btSocket_btbc.getOutputStream().write('4');
+//                btSocket_btbc.getOutputStream().write('\n');
+//
+//                inStream_btbc = btSocket_btbc.getInputStream();
+//                int inStreamAvailable_btbc = inStream_btbc.available();
+//                if (inStreamAvailable_btbc > 0) {
+//                    byte[] packetBytes_btbc = new byte[inStreamAvailable_btbc];
+//                    inStream_btbc.read(packetBytes_btbc);
+//                    String[] socInfo = new String(packetBytes_btbc).split("/");
+//                    String stateofcharge_btbc = socInfo[2];
+//                    text1_btbc.setText(stateofcharge_btbc + "%");
+//                    progressbar_btbc.setProgress(Integer.parseInt(stateofcharge_btbc));
+//                }
+//
+//
+//            }catch (IOException e)
+//            {
+//                msg("Error");
+//            }
+//        }
 
     }
 

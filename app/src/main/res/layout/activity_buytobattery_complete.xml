@@ -8,17 +8,16 @@
 
     <Button
         android:id="@+id/returntomain_btbc"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="98dp"
+        android:layout_marginStart="127dp"
         android:layout_marginTop="298dp"
-        android:layout_marginEnd="123dp"
+        android:layout_marginEnd="127dp"
         android:layout_marginBottom="118dp"
         android:text="Return to Main"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.82"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -40,9 +39,9 @@
 
     <Button
         android:id="@+id/progresscheck_btbc"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="131dp"
+        android:layout_marginStart="127dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="127dp"
         android:layout_marginBottom="8dp"
@@ -50,10 +49,9 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.63" />
 
     <ProgressBar
         android:id="@+id/progressbar_btbc"

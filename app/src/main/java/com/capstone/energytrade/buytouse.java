@@ -48,6 +48,7 @@ public class buytouse extends AppCompatActivity {
                     }
 
                 }
+                system_status.btuStatus = false;
                 Intent nextpage_btu = new Intent(buytouse.this, buytouse_complete.class);
                 startActivity(nextpage_btu);
 
