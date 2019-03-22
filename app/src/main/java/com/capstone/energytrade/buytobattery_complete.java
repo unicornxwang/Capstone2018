@@ -20,7 +20,7 @@ import java.util.TimerTask;
 public class buytobattery_complete extends AppCompatActivity {
 
     private ProgressBar progressbar_btbc;
-    private Button progresscheck_btbc;
+    private Button CT_btbc;
     private Button returntomain_btbc;
     private TextView text1_btbc;
     private InputStream inStream_btbc = null;
@@ -33,16 +33,39 @@ public class buytobattery_complete extends AppCompatActivity {
         setContentView(R.layout.activity_buytobattery_complete);
 
         progressbar_btbc = (ProgressBar) findViewById(R.id.progressbar_btbc);
-        progresscheck_btbc = (Button) findViewById(R.id.progresscheck_btbc);
+        CT_btbc = (Button) findViewById(R.id.CT_btbc);
         returntomain_btbc = (Button) findViewById(R.id.returntomain_btbc);
         text1_btbc = (TextView) findViewById(R.id.text1_btbc);
 
 
-        progresscheck_btbc.setOnClickListener(new View.OnClickListener() {
+        progressCheck();
+//        progresscheck_btbc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                progressCheck();
+//            }
+//        });
+
+        CT_btbc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressCheck();
+                if(btSocket_btbc != null)
+                {
+                    try
+                    {
+                        btSocket_btbc.getOutputStream().write('5');
+                        btSocket_btbc.getOutputStream().write('\n');
+                    }
+                    catch (IOException e)
+                    {
+                        msg("Error");
+                    }
+
+                }
+                system_status.btbStatus = true;
+                finish();
             }
+
         });
 
         returntomain_btbc.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +77,24 @@ public class buytobattery_complete extends AppCompatActivity {
         });
 
     }
+
+//    private void cancelTransaction_btbc() {
+//        if(btSocket_btbc != null)
+//        {
+//            try
+//            {
+//                btSocket_btbc.getOutputStream().write('5');
+//                btSocket_btbc.getOutputStream().write('\n');
+//            }
+//            catch (IOException e)
+//            {
+//                msg("Error");
+//            }
+//
+//        }
+//        system_status.btbStatus = true;
+//        finish();
+//    }
 
     private void progressCheck() {
         if(btSocket_btbc!=null) {

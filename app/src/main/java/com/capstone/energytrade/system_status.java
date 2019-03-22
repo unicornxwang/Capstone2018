@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class system_status extends AppCompatActivity {
 
-//    public static boolean btbStatus= false;
+    public static boolean btbStatus= true;
     public static boolean btuStatus= true;
     public static boolean sellStatus = true;
 //

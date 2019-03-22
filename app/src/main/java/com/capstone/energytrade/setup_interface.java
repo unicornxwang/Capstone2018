@@ -73,9 +73,16 @@ public class setup_interface extends AppCompatActivity {
         btb_setup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(system_status.btbStatus)
+                {
+                    Intent btbInterface = new Intent(setup_interface.this, tradeEnergy.class);
+                    startActivity(btbInterface);
+                }
+                else {
+                    Intent btbcInterface = new Intent(setup_interface.this, buytobattery_complete.class);
+                    startActivity(btbcInterface);
+                }
 
-                Intent btbInterface = new Intent(setup_interface.this, tradeEnergy.class);
-                startActivity(btbInterface);
             }
         });
 

@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/returntomain_btbc"
-        android:layout_width="130dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="127dp"
         android:layout_marginTop="298dp"
@@ -30,6 +30,9 @@
         android:layout_marginTop="121dp"
         android:layout_marginEnd="145dp"
         android:layout_marginBottom="8dp"
+        android:text="Charging..."
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,14 +41,14 @@
         app:layout_constraintVertical_bias="0.188" />
 
     <Button
-        android:id="@+id/progresscheck_btbc"
-        android:layout_width="130dp"
+        android:id="@+id/CT_btbc"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="127dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="127dp"
         android:layout_marginBottom="8dp"
-        android:text="progress check"
+        android:text="cancel transaction"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
