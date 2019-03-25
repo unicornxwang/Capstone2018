@@ -48,8 +48,8 @@ public class BluetoothApplication extends Application {
             } catch (IOException e) {
                 ConnectSuccess = false;//if the try failed, you can check the exception here
                 msg("Bluetooth Connection Failed.");
-                Intent failtoconnect = new Intent (this, btPairing.class);
-                startActivity(failtoconnect);
+//                Intent failtoconnect = new Intent (this, btPairing.class);
+//                startActivity(failtoconnect);
             }
     }
 

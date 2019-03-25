@@ -69,32 +69,37 @@ public class system_setup extends AppCompatActivity {
                 btSocket_system.getOutputStream().write('3');
                 btSocket_system.getOutputStream().write('/');
 
+                btSocket_system.getOutputStream().write(batterysize_system.getText().toString().getBytes());
+                btSocket_system.getOutputStream().write('/');
+
                 btSocket_system.getOutputStream().write(myport_system.getText().toString().getBytes());
                 btSocket_system.getOutputStream().write('/');
 
-                btSocket_system.getOutputStream().write(batterysize_system.getText().toString().getBytes());
-
-                btSocket_system.getOutputStream().write('/');
-
-                if(port1_system.getText().toString().trim() == "")
+                if(port1_system.getText().toString().trim().equals(""))
                 {
                     btSocket_system.getOutputStream().write('0');
+                    btSocket_system.getOutputStream().write('0');
+
                 } else {
                     btSocket_system.getOutputStream().write(port1_system.getText().toString().trim().getBytes());
                 }
                 btSocket_system.getOutputStream().write('/');
 
-                if(port2_system.getText().toString().trim() == "")
+                if(port2_system.getText().toString().trim().equals(""))
                 {
                     btSocket_system.getOutputStream().write('0');
+                    btSocket_system.getOutputStream().write('0');
+
                 } else {
                     btSocket_system.getOutputStream().write(port2_system.getText().toString().trim().getBytes());
                 }
                 btSocket_system.getOutputStream().write('/');
 
-                if(port3_system.getText().toString().trim() == "")
+                if(port3_system.getText().toString().trim().equals(""))
                 {
                     btSocket_system.getOutputStream().write('0');
+                    btSocket_system.getOutputStream().write('0');
+
                 } else {
                     btSocket_system.getOutputStream().write(port3_system.getText().toString().trim().getBytes());
                 }
