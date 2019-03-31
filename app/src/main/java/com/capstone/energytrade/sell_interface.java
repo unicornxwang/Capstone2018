@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class sell_interface extends AppCompatActivity {
 
@@ -24,8 +23,6 @@ public class sell_interface extends AppCompatActivity {
 
     private BluetoothSocket btSocket_sell = BluetoothApplication.getApplication().getCurrentBluetoothConnection();
 
-    private String sPrice;
-    private String sQuantity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +32,6 @@ public class sell_interface extends AppCompatActivity {
         sell_sell = (Button) findViewById(R.id.sell_sell);
         price_sell = (EditText) findViewById(R.id.price_sell);
         quantity_sell = (EditText) findViewById(R.id.quantity_sell);
-//        sPrice = price_sell.getText().toString();
-//        sQuantity = quantity_sell.getText().toString();
 
         return_sell.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +55,7 @@ public class sell_interface extends AppCompatActivity {
                         msg("Error");
                     }
                 }
-//                else{
-////                        Toast.makeText(this, "Please enter a valid number.", Toast.LENGTH_SHORT).show();
-//                        msg("Please enter a valid number");
-//                        return;
-//                }
+
                 system_status.sellStatus = false;
                 Intent nextpage_sell = new Intent(sell_interface.this, sell_complete.class);
                 startActivity(nextpage_sell);

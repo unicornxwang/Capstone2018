@@ -1,7 +1,5 @@
 package com.capstone.energytrade;
 
-import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,6 @@ import java.util.TimerTask;
 public class setup_interface extends AppCompatActivity {
 
     private ImageButton return_setup;
-//    private Button batterylevel_setup;
     private Button btb_setup;
     private Button btu_setup;
     private Button sell_setup;
@@ -33,9 +30,6 @@ public class setup_interface extends AppCompatActivity {
     private InputStream stateofcharge = null;
     private ProgressBar progress_setup;
 
-//    private ProgressDialog progress;
-//
-//    BluetoothAdapter myBluetooth = null;
     private BluetoothSocket btSocket_setup = null;
     private InputStream inStream_setup = null;
 
@@ -63,12 +57,6 @@ public class setup_interface extends AppCompatActivity {
             }
         });
 
-//        batterylevel_setup.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                requestStateofCharge();
-//            }
-//        });
 
         btb_setup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,24 +162,7 @@ public class setup_interface extends AppCompatActivity {
                         },1000);//Update text every second
 
                     }
-//            try
-//            {
-//                btSocket_setup.getOutputStream().write('7');
-//                btSocket_setup.getOutputStream().write('\n');
-//                inStream_setup = btSocket_setup.getInputStream();
-//                int inStreamAvailable = inStream_setup.available();
-//                if (inStreamAvailable > 0)
-//                {
-//                    byte[]packetBytes_setup = new byte[inStreamAvailable];
-//                    inStream_setup.read(packetBytes_setup);
-//                    System.out.println(packetBytes_setup);
-//                    String[] socInfo = new String (packetBytes_setup).split("/");
-//                    String stateofcharge = socInfo [2];
-//                    System.out.println(socInfo);
-//                    storage_setup.setText(stateofcharge + "%");
-//                    progress_setup.setProgress(Integer.parseInt(stateofcharge));
-//                }
-//            }
+
             catch (IOException E)
             {
                 msg("Error");

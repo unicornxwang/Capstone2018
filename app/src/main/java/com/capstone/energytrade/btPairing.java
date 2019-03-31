@@ -18,7 +18,6 @@ import java.util.Set;
 
 public class btPairing extends AppCompatActivity {
 
-//    public static final String EXTRA_ADDRESS = "device_address";
     private Set<BluetoothDevice> pairedDevices;
     private BluetoothAdapter myBluetooth = null;
     Button btnPaired;
@@ -33,7 +32,7 @@ public class btPairing extends AppCompatActivity {
         devicelist = (ListView) findViewById(R.id.listview);
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
         if (myBluetooth == null) {
-            //Show a mensag. that thedevice has no bluetooth adapter
+            //Show a mensag. that the device has no bluetooth adapter
             Toast.makeText(getApplicationContext(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
             //finish apk
             finish();

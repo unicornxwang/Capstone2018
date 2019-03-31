@@ -48,8 +48,6 @@ public class system_setup extends AppCompatActivity {
         return_system.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent returntomain_system = new Intent(system_setup.this, setup_interface.class);
-//                startActivity(returntomain_system);
                 finish();
             }
         });

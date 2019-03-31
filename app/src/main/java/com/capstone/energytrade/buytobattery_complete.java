@@ -1,6 +1,5 @@
 package com.capstone.energytrade;
 
-import android.app.PictureInPictureParams;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,12 +37,6 @@ public class buytobattery_complete extends AppCompatActivity {
 
 
         progressCheck();
-//        progresscheck_btbc.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                progressCheck();
-//            }
-//        });
 
         CT_btbc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,23 +70,6 @@ public class buytobattery_complete extends AppCompatActivity {
 
     }
 
-//    private void cancelTransaction_btbc() {
-//        if(btSocket_btbc != null)
-//        {
-//            try
-//            {
-//                btSocket_btbc.getOutputStream().write('5');
-//                btSocket_btbc.getOutputStream().write('\n');
-//            }
-//            catch (IOException e)
-//            {
-//                msg("Error");
-//            }
-//
-//        }
-//        system_status.btbStatus = true;
-//        finish();
-//    }
 
     private void progressCheck() {
         if(btSocket_btbc!=null) {
@@ -139,28 +114,7 @@ public class buytobattery_complete extends AppCompatActivity {
                 msg("Error");
             }
         }
-//        if (btSocket_btbc != null) {
-//            try {
-//                btSocket_btbc.getOutputStream().write('4');
-//                btSocket_btbc.getOutputStream().write('\n');
-//
-//                inStream_btbc = btSocket_btbc.getInputStream();
-//                int inStreamAvailable_btbc = inStream_btbc.available();
-//                if (inStreamAvailable_btbc > 0) {
-//                    byte[] packetBytes_btbc = new byte[inStreamAvailable_btbc];
-//                    inStream_btbc.read(packetBytes_btbc);
-//                    String[] socInfo = new String(packetBytes_btbc).split("/");
-//                    String stateofcharge_btbc = socInfo[2];
-//                    text1_btbc.setText(stateofcharge_btbc + "%");
-//                    progressbar_btbc.setProgress(Integer.parseInt(stateofcharge_btbc));
-//                }
-//
-//
-//            }catch (IOException e)
-//            {
-//                msg("Error");
-//            }
-//        }
+
 
     }
 
